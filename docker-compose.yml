@@ -1,0 +1,36 @@
+services:
+  mysql:
+    image: mysql:5.7
+    container_name: mysql
+    env_file:
+      - .env_file
+    volumes:
+      - mysql_data_backup:/var/lib/mysql
+    networks:
+      - php_application
+    ports:
+      - "3306:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "uroot", "-p1234"]
+      interval: 1m30s
+      timeout: 30s
+      retries: 5
+      start_period: 30s
+  php:
+    build: 
+     context: .
+    container_name: php
+    restart: always
+    depends_on:
+      - mysql
+    ports:
+      - "8080:80"
+    networks:
+      - php_application
+    
+
+volumes:
+  mysql_data_backup:
+networks:
+  php_application:
+    driver: bridge

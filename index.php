@@ -25,14 +25,19 @@ $result = mysqli_query($mysqli, "SELECT * FROM users ORDER BY id DESC");
 		</tr>
 		<?php
 		// Fetch the next row of a result set as an associative array
-		while ($res = mysqli_fetch_assoc($result)) {
+		if($result){
+			while ($res = mysqli_fetch_assoc()) {
 			echo "<tr>";
 			echo "<td>".$res['name']."</td>";
 			echo "<td>".$res['age']."</td>";
 			echo "<td>".$res['email']."</td>";	
 			echo "<td><a href=\"edit.php?id=$res[id]\">Edit</a> | 
 			<a href=\"delete.php?id=$res[id]\" onClick=\"return confirm('Are you sure you want to delete?')\">Delete</a></td>";
+			}
+		}else {
+			echo "no record found";
 		}
+		
 		?>
 	</table>
 </body>
